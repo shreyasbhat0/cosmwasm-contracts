@@ -4,12 +4,6 @@ use serde::{Deserialize, Serialize};
 use cosmwasm_std::Addr;
 use cw_storage_plus::Item;
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
-pub struct State {
-    pub count: i32,
-    pub owner: Addr,
-}
-
 pub const TODOLIST: Item<TodoList> = Item::new("todolist");
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
@@ -57,9 +51,9 @@ impl TodoList {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
 pub struct Task {
-    pub name: String,
-    pub description: String,
-    pub completed: bool,
+    name: String,
+    description: String,
+    completed: bool,
 }
 
 impl Task {
@@ -78,5 +72,13 @@ impl Task {
 
     pub fn done(&mut self, completed: bool) {
         self.completed = completed;
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn description(&self) -> &str {
+        &self.description
     }
 }

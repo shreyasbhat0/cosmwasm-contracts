@@ -151,11 +151,10 @@ pub mod query {
         let state = TODOLIST.load(deps.storage)?;
         let mut result: TaskListResponse = TaskListResponse { tasks: vec![] };
         state.tasks.into_iter().for_each(|task| {
-            result.tasks.push(Task {
-                name: task.name,
-                description: task.description,
-                completed: task.completed,
-            })
+            result.tasks.push(Task::new(
+                task.name().to_string(),
+                task.description().to_string(),
+            ))
         });
         Ok(result)
     }
@@ -190,11 +189,9 @@ mod tests {
         let value: TaskListResponse = from_binary(&res).unwrap();
 
         let mut actual = TaskListResponse { tasks: vec![] };
-        actual.tasks.push(Task {
-            name: "Task1".to_string(),
-            description: "some des".to_string(),
-            completed: false,
-        });
+        actual
+            .tasks
+            .push(Task::new("Task1".to_string(), "some des".to_string()));
         assert_eq!(actual, value);
     }
 
@@ -222,16 +219,12 @@ mod tests {
         let value: TaskListResponse = from_binary(&res).unwrap();
 
         let mut actual = TaskListResponse { tasks: vec![] };
-        actual.tasks.push(Task {
-            name: "Task1".to_string(),
-            description: "some des".to_string(),
-            completed: false,
-        });
-        actual.tasks.push(Task {
-            name: "task2".to_string(),
-            description: "desc".to_string(),
-            completed: false,
-        });
+        actual
+            .tasks
+            .push(Task::new("Task1".to_string(), "some des".to_string()));
+        actual
+            .tasks
+            .push(Task::new("task2".to_string(), "desc".to_string()));
 
         assert_eq!(actual, value);
     }
